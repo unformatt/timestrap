@@ -16,10 +16,10 @@
     "npm": "^6.1.0"
   },
   "devDependencies": {
-    "gulp": "^4.0.0",
-    "gulp-eslint": "^4.0.2",
     "del": "^3.0.0",
     "eslint-plugin-vue": "^4.5.0",
+    "gulp": "^4.0.0",
+    "gulp-eslint": "^4.0.2",
     "vue-eslint-parser": "^2.0.3",
     "webpack-stream": "^4.0.3"
   },
