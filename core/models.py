@@ -44,6 +44,8 @@ class Project(models.Model):
     estimate = models.DecimalField(max_digits=10, decimal_places=2,
                                    blank=True, null=True)
 
+    users = models.ManyToManyField('auth.User', through='ProjectUser')
+
     class Meta:
         default_permissions = ('view', 'add', 'change', 'delete')
         ordering = ['client', '-id']
@@ -78,6 +80,11 @@ class Project(models.Model):
             total_estimate = Decimal(self.estimate)
             return int(100 * (total_cost/total_estimate))
         return None
+
+
+class ProjectUser(models.Model):
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
 
 
 class Task(models.Model):

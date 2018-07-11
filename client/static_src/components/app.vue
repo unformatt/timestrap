@@ -40,7 +40,7 @@
                 Timesheet
               </router-link>
             </li>
-            <li class="nav-item">
+            <li v-if="this.$perms.view_client" class="nav-item">
               <router-link
                 id="nav-clients"
                 :to="clients"
@@ -51,7 +51,7 @@
                 Clients
               </router-link>
             </li>
-            <li class="nav-item">
+            <li v-if="this.$perms.add_task" class="nav-item">
               <router-link
                 id="nav-tasks"
                 :to="tasks"

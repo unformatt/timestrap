@@ -31,8 +31,10 @@
 
     <chart :entries="entries"/>
 
+<!--     <div
+      v-if="this.$perms.view_entry" -->
     <div
-      v-if="this.$perms.view_entry"
+      v-if="1"
       id="entry-rows">
       <div
         v-for="(entryBlock, blockIndex) in entries"

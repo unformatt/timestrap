@@ -41,8 +41,10 @@
       :config="modal"
       @close="toggleModal"/>
 
+    <!-- <div
+      v-if="this.$perms.view_task" -->
     <div
-      v-if="this.$perms.view_task"
+      v-if="1"
       class="rounded">
       <div class="task-head bg-secondary text-white row py-2">
         <div class="col-8 d-flex align-items-center">

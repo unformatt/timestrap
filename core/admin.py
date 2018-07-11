@@ -1,9 +1,23 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.contrib.auth.models import User
+from django.contrib.sites.models import Site
 
 from import_export import resources
 
-from .models import Client, Entry, Project, Task
+from .models import Client, Entry, Project, Task, ProjectUser
 
+#import pdb; pdb.set_trace()
+BaseUserAdmin = admin.site._registry[User].__class__
+admin.site.unregister(User)
+
+class ProjectUserInline(admin.StackedInline):
+    model = ProjectUser
+    can_delete = False
+
+@admin.register(User)
+class UserAdmin(BaseUserAdmin):
+    inlines = BaseUserAdmin.inlines + [ProjectUserInline]
 
 @admin.register(Client)
 class ClientAdmin(admin.ModelAdmin):

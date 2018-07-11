@@ -1,9 +1,11 @@
 from django.contrib.auth.models import User, Permission
 
 from rest_framework import viewsets, permissions, filters
+from rest_framework.permissions import IsAuthenticated
+
 import django_filters
 
-from core.models import Client, Project, Entry, Task
+from core.models import Client, Project, Entry, Task, ProjectUser
 from .serializers import (UserSerializer, ClientSerializer,
                           PermissionSerializer, ProjectSerializer,
                           EntrySerializer, TaskSerializer)
@@ -60,6 +62,9 @@ class ProjectViewSet(viewsets.ModelViewSet):
     pagination_class = None
     filter_fields = ('id', 'client',)
 
+    def get_queryset(self):
+        return super().get_queryset().filter(id__in=ProjectUser.objects.filter(user=self.request.user).values_list('project_id', flat=True))
+
 
 class EntryFilter(django_filters.rest_framework.FilterSet):
     min_date = django_filters.DateFilter(name="date", lookup_expr="gte")
@@ -86,8 +91,22 @@ class EntryViewSet(viewsets.ModelViewSet):
     search_fields = ('id', 'date', 'note', 'user__username', 'task__name',
                      'project__name', 'project__client__name',)
 
+    permission_classes = (IsAuthenticated,)
+
     def get_queryset(self):
-        return Entry.on_site.all()
+        qs = Entry.on_site.all()
+        if not self.request.user.is_superuser:
+            qs = qs.filter(user=self.request.user)
+        return qs
+
+    def create(self, request):
+        # TODO Enforce user has permission to this project
+        project_id = int(request.data['project'].split('/')[-2])
+        if ProjectUser.objects.filter(project_id=project_id, user=request.user).exists():
+            response = super(EntryViewSet, self).create(request)
+            return response
+        else:
+            raise Exception('User does not have access to project %s' % project_id)
 
 
 class TaskViewSet(viewsets.ModelViewSet):
