@@ -1,21 +1,21 @@
 version: '3'
 
 services:
-  db:
-    image: postgres
-    environment:
-      - PGDATA=/db-data
-    volumes:
-      - db:/db-data
+  # db:
+  #   image: postgres
+  #   environment:
+  #     - PGDATA=/db-data
+  #   volumes:
+  #     - db:/db-data
   web:
     build: .
-    command: daphne timestrap.asgi:application --port 80 --bind 0.0.0.0 -v2
+    command: daphne timestrap.asgi:application --port 8000 --bind 0.0.0.0 -v2
     ports:
-      - "80:80"
-    depends_on:
-      - db
+      - "8000:8000"
+    # depends_on:
+    #   - db
     environment:
-      - SECRET_KEY=CHANGE-ME
+      - SECRET_KEY=CHANGE-ME2
 
-volumes:
-  db:
+# volumes:
+#   db:

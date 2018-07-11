@@ -32,3 +32,4 @@
 # code coverage
 /.coverage*
 !/.coveragerc
+*.sublime-*
